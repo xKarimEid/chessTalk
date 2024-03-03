@@ -10,3 +10,7 @@ train on the same data and compare it
 After that is completed
 
 Time to do the LLM integration with a chess API
+
+1) Wrap the encoder with fastapi
+2) Add tests
+3) Make a docker file
