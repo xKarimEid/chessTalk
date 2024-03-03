@@ -98,7 +98,7 @@ class Tokenizer:
             for idx1, idx2 in self.token_mapping:
                 f.write(f"{idx1} {idx2}\n")
 
-    def load(self, path = 'tokenizers/models'):
+    def load(self, path = 'tokenizers/models/'):
         """Loads model parameters"""
 
         # Reset token_mapping
