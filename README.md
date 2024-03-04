@@ -1,16 +1,12 @@
-This repo does the following:
+This repo is my own implementation of byte pair encoding thanks to Andrej Karpathy work
 
-    1) Implement a basic tokenizer
-    2) Implement GPT2
-    3) Train on chess data
+Todo list
+    1) Implement handling of special tokens /put special tokens in the input data
+    2) Add more tests
+    3) Add FastApi implementation and package it into docker
 
-After this is accomplished, another repo will use default tokenizer and pretrained network
-train on the same data and compare it
+Docker file does the following:
 
-After that is completed
-
-Time to do the LLM integration with a chess API
-
-1) Wrap the encoder with fastapi
-2) Add tests
-3) Make a docker file
+runs the train script for training model
+copys .model file
+runs the fastapi server enabling encoding/decoding string by making api requests to endpoint
