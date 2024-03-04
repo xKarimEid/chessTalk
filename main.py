@@ -1,25 +1,31 @@
-"""Tokenizing the data"""
+"""Exposing the tokenizer to an endpoint"""
 
-import os 
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
 from tokenizers.bpe.basic import Tokenizer
 
 
-train_path = os.path.abspath('data/train.txt')
-test_path = os.path.abspath('data/test.txt')
-
-with open(train_path, 'r') as file:
-    train_data = file.readlines()
-
-with open(test_path, 'r') as file:
-    test_data = file.readlines()
-
-
-train_data= [int(idx) for idx in train_data]
-
-
-test_data = [int(idx) for idx in test_data]
+app = FastAPI()
 
 tokenizer = Tokenizer()
 tokenizer.load()
 
-text = test_data[:100]
+class myData(BaseModel):
+    text: str
+
+
+@app.post("/encode")
+async def encode_text(data : myData):
+    """Testing out FastAPI"""
+
+    text = data.text
+    print(text)
+
+    encoded_text = tokenizer.encode(text)
+    return {"encoded_text": encoded_text}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host = "127.0.0.1", port = 8000)
