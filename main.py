@@ -12,17 +12,28 @@ app = FastAPI()
 tokenizer = Tokenizer()
 tokenizer.load()
 
-class myData(BaseModel):
+class EncodingData(BaseModel):
+    """Data for encoding/decoding"""
     text: str
 
+class DecodingData(BaseModel):
+    """Data for decoding"""
+    ids : list
+
+
+@app.post("/decode")
+async def decode_ids(idx : DecodingData):
+    """Decoding back to text"""
+
+    ids = idx.ids
+    decoded_text = tokenizer.decode(ids)
+    return {"decoded_text": decoded_text}
 
 @app.post("/encode")
-async def encode_text(data : myData):
+async def encode_text(data : EncodingData):
     """Testing out FastAPI"""
 
     text = data.text
-    print(text)
-
     encoded_text = tokenizer.encode(text)
     return {"encoded_text": encoded_text}
 

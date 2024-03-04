@@ -1,9 +1,10 @@
 This repo is my own implementation of byte pair encoding thanks to Andrej Karpathy work
 
 Todo list
-    1) Implement handling of special tokens /put special tokens in the input data
-    2) Add more tests
-    3) Add FastApi implementation and package it into docker
+    1) Add FastApi implementation
+    2) Package to docker
+    3) Implement handling of special tokens /put special tokens in the input data
+    4) Add more tests
 
 Docker file does the following:
 
