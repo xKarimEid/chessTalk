@@ -4,6 +4,7 @@ Todo list
     1) Add FastApi implementation
     2) Package to docker
     3) Implement handling of special tokens /put special tokens in the input data
+    4) Implement error handling so that we dont get internal server error for wrong user input
     4) Add more tests
 
 Docker file does the following:
