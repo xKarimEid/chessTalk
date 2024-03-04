@@ -1,20 +1,25 @@
 """Tokenizing the data"""
 
-import json
+import os 
 from tokenizers.bpe.basic import Tokenizer
 
 
-data = []
-with open("data/data.jsonl", 'r', encoding="utf-8") as file:
-    for line in file:
-        body = json.loads(line)['text']
-        data.append(body)
+train_path = os.path.abspath('data/train.txt')
+test_path = os.path.abspath('data/test.txt')
 
+with open(train_path, 'r') as file:
+    train_data = file.readlines()
+
+with open(test_path, 'r') as file:
+    test_data = file.readlines()
+
+
+train_data= [int(idx) for idx in train_data]
+
+
+test_data = [int(idx) for idx in test_data]
 
 tokenizer = Tokenizer()
 tokenizer.load()
 
-text = "Hello this is a test, probably should put this in a test folder"
-ids = tokenizer.encode(text)
-decoded = tokenizer.decode(ids)
-print(decoded)
+text = test_data[:100]

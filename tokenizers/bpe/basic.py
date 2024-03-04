@@ -44,6 +44,7 @@ class Tokenizer:
 
         for i in range(iterations):
             new_token = token_start_id + i
+            print(f"iteration: {i}, {len(ids)}")
             stats = self.get_stats(ids)
             most_frequent_pair = sorted(stats, key = lambda k : stats[k], reverse=True)[0]
 
