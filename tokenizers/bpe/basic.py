@@ -1,14 +1,14 @@
 """
-basic Tokenizer class implementation
+Basic Tokenizer class implementation
 """
 
+from .tokenizer_base import BaseTokenzier
 
-class Tokenizer:
+class Tokenizer(BaseTokenzier):
     """Basic tokenizer"""
 
     def __init__(self):
-        self.token_mapping = {}
-        self.vocab = {}
+        super().__init__()
 
     @staticmethod
     def get_stats(ids):
@@ -37,13 +37,16 @@ class Tokenizer:
 
         return new_ids
 
-    def train_encoder(self, text, iterations, token_start_id = 256):
+    def train(self, text, vocab_size):
         """Train the encoder"""
+
+        assert vocab_size >= 256
+        iterations = vocab_size - 256
 
         ids = list(text.encode("utf-8"))
 
         for i in range(iterations):
-            new_token = token_start_id + i
+            new_token = 256 + i
             print(f"iteration: {i}, {len(ids)}")
             stats = self.get_stats(ids)
             most_frequent_pair = sorted(stats, key = lambda k : stats[k], reverse=True)[0]
@@ -52,16 +55,16 @@ class Tokenizer:
             ids = self.replace_pair(ids, most_frequent_pair, new_token)
 
 
-        self.vocab = { idx : bytes([idx]) for idx in range(token_start_id) }
+        self.vocab = { idx : bytes([idx]) for idx in range(256) }
 
         for (p1, p2), idx in self.token_mapping.items():
             self.vocab[idx] = self.vocab[p1] + self.vocab[p2]
 
 
-    def encode(self, string):
+    def encode(self, text):
         """Encode a given string"""
 
-        ids = list(string.encode("utf-8"))
+        ids = list(text.encode("utf-8"))
 
         merging = True
         while merging:
@@ -87,40 +90,3 @@ class Tokenizer:
         byte_string = b"".join(self.vocab[idx] for idx in ids)
         decoded = byte_string.decode("utf-8", errors = 'replace')
         return decoded
-
-    def save(self, path = 'tokenizers/models/'):
-        """Saves token_mapping"""
-
-        model_file = path + ".model"
-        with open(model_file, 'w', encoding="utf-8") as f:
-            # write the version, pattern and merges, that's all that's needed
-            f.write("basic encoding v1\n")
-            # the merges dict
-            for idx1, idx2 in self.token_mapping:
-                f.write(f"{idx1} {idx2}\n")
-
-    def load(self, path = 'tokenizers/models/'):
-        """Loads model parameters"""
-
-        # Reset token_mapping
-        self.token_mapping = {}
-        new_token = 256
-
-        model_file = path + '.model'
-        with open(model_file, "r", encoding="utf-8") as file:
-            version = file.readline()
-            print(version)
-
-            for line in file.readlines():
-                ix1, ix2 = map(int, line.split(" "))
-                self.token_mapping[(ix1, ix2)] = new_token
-                new_token += 1
-
-        self._buildvocab()
-
-    def _buildvocab(self):
-        """Builds vocab from token_embeddings"""
-        self.vocab = { idx : bytes([idx]) for idx in range(256) }
-
-        for (p1, p2), idx in self.token_mapping.items():
-            self.vocab[idx] = self.vocab[p1] + self.vocab[p2]
