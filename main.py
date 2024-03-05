@@ -1,4 +1,4 @@
-"""Exposing the tokenizer to an endpoint"""
+"""Exposing the tokenizer to a FastAPI endpoint"""
 
 
 from fastapi import FastAPI
